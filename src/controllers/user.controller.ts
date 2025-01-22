@@ -1,10 +1,10 @@
 import { Request, Response } from 'express';
-import { comparePassword } from '../../utils/bcrypt';
-import { verifyToken } from '../../utils/jwt';
-import { sendEmail } from '../../utils/nodemailer';
+import { comparePassword } from '../utils/bcrypt';
+import { verifyToken } from '../utils/jwt';
+import { sendEmail } from '../utils/nodemailer';
 import User from './userModel';
-import UserService from './userService';
-import { generateVerificationCode } from '../../utils';
+import UserService from '../services/userService';
+import { generateVerificationCode } from '../utils';
 
 export default class UserController {
   public static updateProfile = async (req: Request, res: Response) => {

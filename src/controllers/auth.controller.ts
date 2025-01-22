@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
-import { comparePassword } from '../../utils/bcrypt';
-import { generateToken, verifyToken } from '../../utils/jwt';
-import UserService from '../user/userService';
+import { comparePassword } from '../utils/bcrypt';
+import { generateToken, verifyToken } from '../utils/jwt';
+import UserService from '../services/userService';
 
 export default class AuthController {
   public static login = async (req: Request, res: Response) => {
