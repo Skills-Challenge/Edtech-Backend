@@ -39,12 +39,6 @@ const Challenge = new mongoose.Schema(
         deliverables: {
             type: String,
             required: [true, "Project deliverables are required"]
-        },
-        createdAt: {
-            type: Date,
-        },
-        lastModified: {
-            type: Date
         }
     },
     {

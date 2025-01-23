@@ -33,7 +33,8 @@ export default class ChallengeService{
             });
             return challenge;
         } catch (err: any) {
-            console.error(`Error creating challenge: ${err?.message}`);
+            console.error("Error creating challenge: ", err?.message);
+            throw err
         }
     }
 
@@ -43,7 +44,7 @@ export default class ChallengeService{
             const challenge = await Challenge.findById(id);
             return challenge;
         }catch(error: any){
-            console.error("Error getting challenge: ", error?.message);
+            throw error;
         }
     }
 
@@ -53,6 +54,7 @@ export default class ChallengeService{
             return challenges;
         }catch(error: any){
             console.error("Error getting all challenges: ", error?.message);
+            throw error;
         }
     }
 
@@ -69,6 +71,7 @@ export default class ChallengeService{
             }
         }catch(error: any){
             console.error("Error updating challenge: ", error?.message);
+            throw error;
         }
     }
 
@@ -81,6 +84,7 @@ export default class ChallengeService{
             }
         }catch(error: any){
             console.error("Error deleting challenge: ", error?.message);
+            throw error;
         }
     }
 }
