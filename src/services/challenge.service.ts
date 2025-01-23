@@ -1,3 +1,4 @@
+import { error } from "console";
 import Challenge from "../models/challenge.model";
 import AppError from "../utils/AppError";
 

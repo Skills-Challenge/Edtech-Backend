@@ -2,22 +2,101 @@ import { Request, Response } from 'express';
 import ChallengeService from '../services/challenge.service';
 import AppError from '../utils/AppError';
 
+/**
+ * @swagger
+ * tags:
+ *   name: Challenge
+ *   description: Everything about your Challenge
+ */
 export default class ChallengeController {
-  public static createChallenge = async (req: Request, res: Response) => {
+  /**
+   * @swagger
+   * /challenge/create:
+   *  post:
+   *   description: create a challenge
+   *   parameters:
+   *         - in: body
+   *           name: challenge
+   *           description: create a challenge
+   *           schema:
+   *             type: object
+   *             required:
+   *                - title
+   *                - deadline
+   *                - duration
+   *                - prize
+   *                - contactEmail
+   *                - description
+   *                - brief
+   *                - requirements
+   *                - deliverables
+   *             properties:
+   *                title:
+   *                  type: string
+   *                deadline:
+   *                  type: Date
+   *                duration:
+   *                  type: string
+   *                prize:
+   *                   type: string
+   *                contactEmail:
+   *                   type: string
+   *                description:
+   *                    type: string
+   *                brief:
+   *                    type: string
+   *                requirements:
+   *                    type: string
+   *                deliverables:
+   *                    type: string
+   *   responses:
+   *        201:
+   *          description: Challenge created successfully
+   *        400:
+   *          description: validation errors
+   *        500:
+   *          description: Internal Server Error
+   *
+   *
+   */
+  public static readonly createChallenge: (
+    req: Request,
+    res: Response,
+  ) => Promise<void> = async (req: Request, res: Response) => {
     try {
       const challenge = await ChallengeService.createChallenge(req.body);
-      res
-        .status(201)
-        .json({
-          status: 'success',
-          message: 'Challenge created successfully',
-          challenge,
-        });
+      res.status(201).json({
+        status: 'success',
+        message: 'Challenge created successfully',
+        challenge,
+      });
     } catch (error) {
       res.status(500).json({ message: 'Internal server error' });
       throw new AppError('Internal server error', 500);
     }
   };
+
+  /**
+   * @swagger
+   * /challenge/get/{id}:
+   *   get:
+   *     summary: Get a challenge by ID
+   *     description: Retrieve details of a challenge using its unique ID.
+   *     parameters:
+   *       - in: path
+   *         name: id
+   *         required: true
+   *         schema:
+   *           type: string
+   *         description: The unique ID of the challenge.
+   *     responses:
+   *       200:
+   *         description: Challenge found
+   *       401:
+   *         description: Unauthorized
+   *       500:
+   *         description: Internal Server Error
+   */
 
   public static getChallengeById = async (req: Request, res: Response) => {
     try {
@@ -33,6 +112,21 @@ export default class ChallengeController {
     }
   };
 
+  /**
+   * @swagger
+   * /challenge/get-all:
+   *  get:
+   *   summary: Get all challenges
+   *   description: Retrieve all challenges
+   *   responses:
+   *    200:
+   *     description: Challenges found
+   *    401:
+   *     description: Unauthorized
+   *    500:
+   *     description: Internal Server Error
+   */
+
   public static getAllChallenges = async (req: Request, res: Response) => {
     try {
       const challenges = await ChallengeService.getAllChallenges();
@@ -43,24 +137,107 @@ export default class ChallengeController {
     }
   };
 
+  /**
+   * @swagger
+   * /challenge/update/{id}:
+   *  put:
+   *   summary: Update a challenge
+   *   description: Update a challenge using its unique ID.
+   *   parameters:
+   *       - in: path
+   *         name: id
+   *         required: true
+   *         schema:
+   *          type: string
+   *          description: The unique ID of the challenge.
+   *       - in: body
+   *         name: challenge
+   *         description: create a challenge
+   *         schema:
+   *           type: object
+   *           required:
+   *                - title
+   *                - deadline
+   *                - duration
+   *                - prize
+   *                - contactEmail
+   *                - description
+   *                - brief
+   *                - requirements
+   *                - deliverables
+   *           properties:
+   *                title:
+   *                  type: string
+   *                deadline:
+   *                  type: Date
+   *                duration:
+   *                  type: string
+   *                prize:
+   *                   type: string
+   *                contactEmail:
+   *                   type: string
+   *                description:
+   *                    type: string
+   *                brief:
+   *                    type: string
+   *                requirements:
+   *                    type: string
+   *                deliverables:
+   *                    type: string
+   *   responses:
+   *        201:
+   *          description: Challenge created successfully
+   *        400:
+   *          description: validation errors
+   *        500:
+   *          description: Internal Server Error
+   *
+   *
+   */
 
   public static updateChallenge = async (req: Request, res: Response) => {
-     try{
-        const challenge = await ChallengeService.updateChallenge(req.params.id, req.body);
-        res.status(200).json({ status: 'success', challenge });
-     }catch(error: any){
-         res.status(500).json({ message: 'Internal server error' });
-         throw new AppError(`${error?.message}`, 500);
-     }
-  }
+    try {
+      const challenge = await ChallengeService.updateChallenge(
+        req.params.id,
+        req.body,
+      );
+      res.status(200).json({ status: 'success', challenge });
+    } catch (error: any) {
+      res.status(500).json({ message: 'Internal server error' });
+      throw new AppError(`${error?.message}`, 500);
+    }
+  };
 
+  /**
+   * @swagger
+   * /challenge/delete/{id}:
+   *  delete:
+   *   summary: Delete a challenge
+   *   description: Delete a challenge using its unique ID.
+   *   parameters:
+   *     - in: path
+   *       name: id
+   *       description: The unique ID of the challenge.
+   *       required: true
+   *       schema:
+   *         type: string
+   *   responses:
+   *      200:
+   *        description: Challenge deleted successfully
+   *      400:
+   *        description: Challenge not found
+   *      500:
+   *        description: Internal Server Error
+   */
   public static deleteChallenge = async (req: Request, res: Response) => {
     try {
       const challenge = await ChallengeService.deleteChallenge(req.params.id);
-      res.status(200).json({ status: 'success', message: 'Challenge deleted successfully' });
+      res
+        .status(200)
+        .json({ status: 'success', message: 'Challenge deleted successfully' });
     } catch (error: any) {
       res.status(500).json({ message: `${error?.message}` });
       throw new AppError(`${error?.message}`, 500);
     }
-  }
+  };
 }

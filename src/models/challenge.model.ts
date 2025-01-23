@@ -25,7 +25,7 @@ const Challenge = new mongoose.Schema(
             required: [true , "Challenge contact email is required"]
         },
         description: {
-            type: String,
+            type: [String],
             required: [true, "Project Description is required"]
         },
         brief: {
@@ -33,7 +33,7 @@ const Challenge = new mongoose.Schema(
             required: [true, "Project brief is required"]
         },
         requirements: {
-            type: String,
+            type: [String],
             required: [true, "Project requirements are required"]
         },
         deliverables: {

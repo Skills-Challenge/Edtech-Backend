@@ -3,9 +3,45 @@ import { comparePassword } from '../utils/bcrypt';
 import { generateToken, verifyToken } from '../utils/jwt';
 import UserService from '../services/user.service';
 
+/**
+ * @swagger
+ * tags:
+ *   name: Auth
+ *   description: Everything about your Users
+ */
 export default class AuthController {
+
+  /**
+   * @swagger
+   * /auth/login:
+   *  post:
+   *   description: login user
+   *   parameters:
+   *     - in: body
+   *       name: user
+   *       description: user to login
+   *       schema:
+   *         type: object
+   *         required:
+   *           - email
+   *           - password
+   *         properties:
+   *            email:
+   *              type: string
+   *            password:
+   *              type: string
+   *
+   *   responses:
+   *      200:
+   *        description: Login successful
+   *      400:
+   *        description: Invalid email or password
+   *      500:
+   *        description: Internal Server Error
+   */
   public static login = async (req: Request, res: Response) => {
     const { email, password } = req.body;
+    console.log("Here is the email: ", email);
     try {
       const user = await UserService.findUser(email);
       if (!user) {
@@ -33,6 +69,37 @@ export default class AuthController {
       res.status(500).json({ message: 'Internal server error' });
     }
   };
+
+  /**
+   * @swagger
+   * auth/signup:
+   *  post:
+   *    description: Create a new users
+   *    parameters:
+   *      - in: body
+   *        name: user
+   *        description: The user to register.
+   *        schema:
+   *          type: object
+   *          required:
+   *            - name
+   *            - email
+   *            - password
+   *          properties:
+   *            name:
+   *              type: string
+   *            email:
+   *              type: string
+   *            password:
+   *              type: string
+   *    responses:
+   *      201:
+   *        description: User created successfully
+   *      400:
+   *        description: User already exists
+   *      500:
+   *        description: Internal Server Error
+   */
 
   public static signup = async (req: Request, res: Response) => {
     try {
@@ -67,6 +134,20 @@ export default class AuthController {
     }
   };
 
+  /**
+   * @swagger
+   * /auth/me:
+   *   get:
+   *    descriptions: Get Logged in user
+   *    responses:
+   *     200:
+   *       description: User details
+   *     400:
+   *       description: Unauthorized
+   *     500: 
+   *       description: Internal server error
+   */
+
   public static getCurrentUser = async (req: Request, res: Response) => {
     try {
       const token = req.cookies.token;
@@ -87,6 +168,20 @@ export default class AuthController {
       res.status(500).json({ message: 'Internal server error' });
     }
   };
+
+  /**
+   * @swagger
+   * /auth/logout:
+   *  post:
+   *    description: Logout user
+   *    responses:
+   *         200:
+   *           description: Logout successful
+   *         401:
+   *           description: Unauthorized
+   *         500:
+   *           description: Internal server error
+   */
 
   public static logout = async (req: Request, res: Response) => {
     try {
