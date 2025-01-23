@@ -3,12 +3,14 @@ import express = require('express');
 import cors = require('cors');
 import bodyParser = require('body-parser');
 import cookieParser = require('cookie-parser');
-import authRouter from './modules/auth/authRouter';
+import authRouter from './routes/auth.routes';
 
-import userRouter from './modules/user/userRouter';
+import userRouter from './routes/user.routes';
+import challengeRouter from './routes/challenge.routes';
 import { dbConnection } from './utils/dbConnection';
-import isAuthenticated from './middlewares/auth';
-const PORT = process.env.PORT || 8000;
+import isAuthenticated from './middlewares/auth.middleware';
+import errorHandler from './utils/errorHandler';
+const PORT = process.env.PORT || 8080;
 
 const app = express();
 app.use(cors());
@@ -41,16 +43,17 @@ app.use((req, res, next) => {
   next();
 });
 
-// log every request
 app.use((req, res, next) => {
   console.log(req.originalUrl, '\t', req.method, '\t', req.url);
   next();
 });
 
-// router middlewares
 app.use('/auth', authRouter);
 app.use('/user', isAuthenticated, userRouter);
+app.use("/challenge", challengeRouter);
 
 app.get('/', (req, res) => {
   res.send('Hello world');
 });
+
+app.use(errorHandler);

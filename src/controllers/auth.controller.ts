@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import { comparePassword } from '../utils/bcrypt';
 import { generateToken, verifyToken } from '../utils/jwt';
-import UserService from '../services/userService';
+import UserService from '../services/user.service';
 
 export default class AuthController {
   public static login = async (req: Request, res: Response) => {
@@ -27,7 +27,7 @@ export default class AuthController {
             ? 'localhost'
             : process.env.PROD_DOMAIN,
       });
-      res.status(200).json({ message: 'success', user: user });
+      res.status(200).json({ message: 'success', user: user, token });
     } catch (error) {
       console.log(error);
       res.status(500).json({ message: 'Internal server error' });

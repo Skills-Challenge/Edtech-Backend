@@ -1,5 +1,5 @@
 import mongoose = require('mongoose');
-import { hashPassword } from '../../utils/bcrypt';
+import { hashPassword } from '../utils/bcrypt';
 
 const User = new mongoose.Schema(
   {
@@ -16,6 +16,11 @@ const User = new mongoose.Schema(
       type: String,
       required: [true, 'password is required'],
     },
+    role: {
+      type: String,
+      enum: ['talent','admin'],
+      default: 'talent'
+  },
 
     verificationCode: {
       code: {
@@ -31,7 +36,6 @@ const User = new mongoose.Schema(
   },
 );
 
-// hash password before saving
 User.pre('save', async function (next) {
   const user = this;
   if (user.isModified('password')) {

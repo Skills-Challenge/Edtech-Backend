@@ -2,8 +2,8 @@ import { Request, Response } from 'express';
 import { comparePassword } from '../utils/bcrypt';
 import { verifyToken } from '../utils/jwt';
 import { sendEmail } from '../utils/nodemailer';
-import User from './userModel';
-import UserService from '../services/userService';
+import User from '../models/user.model';
+import UserService from '../services/user.service';
 import { generateVerificationCode } from '../utils';
 
 export default class UserController {
