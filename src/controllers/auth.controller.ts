@@ -59,7 +59,10 @@ export default class AuthController {
         maxAge: 1000 * 60 * 60 * 24 * 7,
         sameSite: 'none',
         secure: true,
-        domain: '.onrender.com'
+        domain:
+          process.env.HOST === 'localhost'
+            ? 'localhost'
+            : process.env.PROD_DOMAIN,
       });
       res.status(200).json({ message: 'success', user: user, token });
     } catch (error) {
