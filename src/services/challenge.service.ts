@@ -1,5 +1,7 @@
 import cron = require('node-cron');
 import Challenge from '../models/challenge.model';
+import APIFeatures from '../utils/APIFeatures';
+import { AnyARecord } from 'dns';
 
 type ChallengeData = {
   title: string;
@@ -54,9 +56,14 @@ export default class ChallengeService {
     }
   };
 
-  public static getAllChallenges = async () => {
+  public static getAllChallenges = async (query: any) => {
     try {
-      const challenges = await Challenge.find();
+      const features = new APIFeatures(Challenge.find(), query)
+      .filter()
+      .sort()
+      .limitFields()
+      .paginate();
+      const challenges = await features.query;
       return challenges;
     } catch (error: any) {
       console.error('Error getting all challenges: ', error?.message);
@@ -120,7 +127,7 @@ export default class ChallengeService {
   };
 
   public static updateChallengeStatus = async () => {
-    cron.schedule('0 0 * * *', async () => {
+    cron.schedule('*/10 * * * * *', async () => {
       try {
         const now = new Date();
 

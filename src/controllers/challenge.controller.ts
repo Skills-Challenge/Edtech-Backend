@@ -129,7 +129,7 @@ export default class ChallengeController {
 
   public static getAllChallenges = async (req: Request, res: Response) => {
     try {
-      const challenges = await ChallengeService.getAllChallenges();
+      const challenges = await ChallengeService.getAllChallenges(req.query);
       res.status(200).json({ status: 'success', challenges });
     } catch (error: any) {
       res.status(500).json({ message: 'Internal server error' });
