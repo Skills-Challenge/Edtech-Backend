@@ -54,8 +54,6 @@ export default class AuthController {
       const token = await generateToken({ id: user._id });
 
       res.cookie('token', token, {
-        path: "/",
-        httpOnly: true,
         maxAge: 1000 * 60 * 60 * 24 * 7,
         sameSite: 'none',
         secure: true,

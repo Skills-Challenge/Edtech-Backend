@@ -13,12 +13,7 @@ import errorHandler from './utils/errorHandler';
 import ChallengeService from './services/challenge.service';
 
 const app = express();
-
-const allowedOrigins = ['http://localhost:8000', 'https://edtech-backend-00ii.onrender.com'];
-app.use(cors({
-  origin: allowedOrigins,
-  credentials: true,
-}));
+app.use(cors());
 
 
 app.use(bodyParser.json());
