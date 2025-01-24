@@ -13,7 +13,12 @@ import errorHandler from './utils/errorHandler';
 import ChallengeService from './services/challenge.service';
 
 const app = express();
-app.use(cors());
+
+const allowedOrigins = ['http://localhost:8000', 'https://edtech-backend-00ii.onrender.com'];
+app.use(cors({
+  origin: allowedOrigins,
+  credentials: true,
+}));
 
 
 app.use(bodyParser.json());
@@ -56,7 +61,7 @@ const swaggerOptions = {
         contact: {
           name: "Nzabera Mike Peter",
         },
-        servers: ["https://edtech-backend-00ii.onrender.com"],
+        servers: ["http://localhost:8000","https://edtech-backend-00ii.onrender.com"],
       },
       components: {
         securitySchemes: {
