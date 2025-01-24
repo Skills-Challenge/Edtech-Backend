@@ -54,13 +54,12 @@ export default class AuthController {
       const token = await generateToken({ id: user._id });
 
       res.cookie('token', token, {
+        path: "/",
+        httpOnly: true,
         maxAge: 1000 * 60 * 60 * 24 * 7,
         sameSite: 'none',
         secure: true,
-        domain:
-          process.env.HOST === 'localhost'
-            ? 'localhost'
-            : process.env.PROD_DOMAIN,
+        domain: process.env.ENVIRONMENT === 'production' ? '.edtech-backend-00ii.onrender.com' : undefined,
       });
       res.status(200).json({ message: 'success', user: user, token });
     } catch (error) {
