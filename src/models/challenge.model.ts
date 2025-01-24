@@ -39,6 +39,11 @@ const Challenge = new mongoose.Schema(
         deliverables: {
             type: String,
             required: [true, "Project deliverables are required"]
+        },
+        status: {
+            type: String,
+            enum: ['completed','open', 'ongoing'],
+            default: 'open'
         }
     },
     {

@@ -208,6 +208,18 @@ export default class ChallengeController {
     }
   };
 
+
+  public static getChallengeStats = async (req: Request, res: Response) => {
+    try{
+
+      const challengeStats = await ChallengeService.getChallengeStats();
+      res.status(200).json({ status: 'success', challengeStats });
+    }catch(error: any){
+      res.status(500).json({ message: 'Internal server error' });
+      throw new AppError(`${error?.message}`, 500);
+    }
+  }
+
   /**
    * @swagger
    * /challenge/delete/{id}:

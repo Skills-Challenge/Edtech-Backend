@@ -10,6 +10,7 @@ import userRouter from './routes/user.routes';
 import challengeRouter from './routes/challenge.routes';
 import isAuthenticated from './middlewares/auth.middleware';
 import errorHandler from './utils/errorHandler';
+import ChallengeService from './services/challenge.service';
 
 const app = express();
 app.use(cors());
@@ -42,6 +43,7 @@ app.use('/auth', authRouter);
 app.use('/user', isAuthenticated, userRouter);
 app.use("/challenge", challengeRouter);
 
+
 app.get('/', (req, res) => {
   res.send('Hello world');
 });
@@ -50,7 +52,6 @@ const swaggerOptions = {
     swaggerDefinition: {
       info: {
         title: "Umurava Service Documentation",
-        description: "Payment Gateway",
         version: "1.0.0",
         contact: {
           name: "Nzabera Mike Peter",
