@@ -209,6 +209,22 @@ export default class ChallengeController {
   };
 
 
+  /**
+   * @swagger
+   * /challenge/stats:
+   *  get:
+   *   summary: Get challenge stats
+   *   description: Get challenge stats
+   *   responses:
+   *       200:
+   *        description: Retrieved All stats
+   *       401:
+   *        description: unauthorized
+   *       500: 
+   *        description: Internal server error
+  */
+
+
   public static getChallengeStats = async (req: Request, res: Response) => {
     try{
 
