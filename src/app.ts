@@ -56,7 +56,7 @@ const swaggerOptions = {
         contact: {
           name: "Nzabera Mike Peter",
         },
-        servers: ["http://localhost:8000"],
+        servers: ["https://edtech-backend-00ii.onrender.com"],
       },
       components: {
         securitySchemes: {
