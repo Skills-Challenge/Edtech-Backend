@@ -1,7 +1,6 @@
 import cron = require('node-cron');
 import Challenge from '../models/challenge.model';
 import APIFeatures from '../utils/APIFeatures';
-import { AnyARecord } from 'dns';
 
 type ChallengeData = {
   title: string;
