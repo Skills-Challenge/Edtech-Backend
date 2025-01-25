@@ -6,7 +6,6 @@ import { AnyARecord } from 'dns';
 type ChallengeData = {
   title: string;
   deadline: Date;
-  duration: string;
   prize: string;
   contactEmail: string;
   description: string;
@@ -20,7 +19,6 @@ export default class ChallengeService {
     const {
       title,
       deadline,
-      duration,
       description,
       prize,
       contactEmail,
@@ -29,10 +27,27 @@ export default class ChallengeService {
       deliverables,
     } = data;
     try {
+
+      if (!deadline) {
+        throw new Error("deadline is required.");
+      }
+
+      const startTime = new Date();
+    
+
+      const start = startTime.getTime();
+      const end = new Date(deadline).getTime();
+      if (end <= start) {
+        throw new Error("Deadline must be later than the current time.");
+      }
+
+      const durationInDays = Math.ceil((end - start) / ( 1000 * 60 * 60 * 24));
+
       const challenge = await Challenge.create({
         title,
+        startTime,
         deadline,
-        duration,
+        duration: `${durationInDays} days`,
         prize,
         contactEmail,
         description,
@@ -125,9 +140,11 @@ export default class ChallengeService {
       throw error;
     }
   };
+  
+
 
   public static updateChallengeStatus = async () => {
-    cron.schedule('*/10 * * * * *', async () => {
+    cron.schedule('0 0 * * *', async () => {
       try {
         const now = new Date();
 
