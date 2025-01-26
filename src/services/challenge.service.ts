@@ -95,6 +95,7 @@ export default class ChallengeService {
       if (!challenge) {
         throw new Error('Challenge not found');
       }
+      return challenge;
     } catch (error: any) {
       console.error('Error updating challenge: ', error?.message);
       throw error;

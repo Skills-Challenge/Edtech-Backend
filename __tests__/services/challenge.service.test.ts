@@ -98,4 +98,106 @@ describe('ChallengeService', () => {
               expect(createdChallenge.duration).toBe(fetchedChallenge?.duration)
         })
     })
+
+
+    describe("Update challenge by id", () => {
+        it("it should update the challenge", async() => {
+            const challengeData = {
+                title: 'Test Challenge',
+                deadline: new Date(Date.now() + 86400000), 
+                prize: '$1000',
+                contactEmail: 'test@example.com',
+                description: 'Test description',
+                brief: 'Test brief',
+                deliverables: 'Test deliverables',
+                requirements: 'Test requirements',
+            }
+
+            const createdChallenge = await ChallengeService.createChallenge(challengeData);
+            
+            const updateChallengeData = {
+                 title: "Challenge test 1",
+                 prize: '$2000'
+            }
+
+            const updatedChallenge = await ChallengeService.updateChallenge(createdChallenge._id.toString(), updateChallengeData as any);
+
+            expect(updateChallengeData).toBeDefined();
+            expect(updatedChallenge.prize).toBe(updateChallengeData.prize)
+        })
+
+        it("it should throw an error if the challenge is not found", async () => {
+            const nonExistentId = "64b9c2f4f2c43b6a947854c1";
+    
+            const updateChallengeData = {
+                title: "Non-existent Challenge",
+                prize: "$5000",
+            };
+            await expect(ChallengeService.updateChallenge(nonExistentId, updateChallengeData as any)).rejects.toThrow(
+                "Challenge not found"
+            );
+        });
+    })
+    
+
+    describe("Delete a challenge", () => {
+        it("it should delete a challenge by id", async() => {
+            const challengeData = {
+                title: 'Test Challenge',
+                deadline: new Date(Date.now() + 86400000), 
+                prize: '$1000',
+                contactEmail: 'test@example.com',
+                description: 'Test description',
+                brief: 'Test brief',
+                deliverables: 'Test deliverables',
+                requirements: 'Test requirements',
+            }
+    
+            const createdChallenge = await ChallengeService.createChallenge(challengeData);
+
+            const deleteChallenge = await ChallengeService.deleteChallenge(createdChallenge._id.toString());
+
+            expect(deleteChallenge).toBeUndefined();
+        })
+
+        it("it should throw exception if challenge is not found", async() => {
+            const nonExistentId = "64b9c2f4f2c43b6a947854c1";
+    
+            const updateChallengeData = {
+                title: "Non-existent Challenge",
+                prize: "$5000",
+            };
+            await expect(ChallengeService.updateChallenge(nonExistentId, updateChallengeData as any)).rejects.toThrow(
+                "Challenge not found"
+            );
+        })
+    })
+
+
+    describe("get challenge stats", () => {
+        it("it should return all challenge stats based on challenge status", async () => {
+            const challengeData = {
+                title: 'Test Challenge',
+                deadline: new Date(Date.now() + 86400000),
+                prize: '$1000',
+                contactEmail: 'test@example.com',
+                description: 'Test description',
+                brief: 'Test brief',
+                deliverables: 'Test deliverables',
+                requirements: 'Test requirements',
+            };
+        
+            const createdChallenge = await ChallengeService.createChallenge(challengeData);
+        
+            const challengeStats = await ChallengeService.getChallengeStats();
+        
+            console.log('Challenge Stats:', challengeStats);
+        
+            expect(challengeStats).toBeDefined();
+            expect(challengeStats.totalOpen).toBe(4);
+            expect(challengeStats.totalOngoing).toBe(0);
+            expect(challengeStats.totalCompleted).toBe(0);
+        });
+        
+    })
 })
