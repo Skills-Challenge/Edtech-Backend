@@ -1,0 +1,14 @@
+version: '3.8'
+
+services:
+  umurava:
+    container_name: umurava-service
+    image: mikepn/edtech:latest
+    networks:
+      - umurava-demo
+    ports:
+      - 8000:8000
+
+networks:
+  umurava-demo:
+    driver: bridge
