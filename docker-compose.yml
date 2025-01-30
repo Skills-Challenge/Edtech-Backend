@@ -4,6 +4,7 @@ services:
   umurava:
     container_name: umurava-service
     image: mikepn/edtech:latest
+    env_file: ".env"
     networks:
       - umurava-demo
     ports:

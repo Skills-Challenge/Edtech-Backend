@@ -11,10 +11,14 @@
   import challengeRouter from './routes/challenge.routes';
   import isAuthenticated from './middlewares/auth.middleware';
   import errorHandler from './utils/errorHandler';
-  import ChallengeService from './services/challenge.service';
 
   const app = express();
-  app.use(cors());
+
+
+  app.use(cors({
+    origin: 'http://localhost:3000',  
+    credentials: true 
+  }));
 
   app.use(bodyParser.json());
   app.use(cookieParser());

@@ -1,6 +1,7 @@
 import cron = require('node-cron');
 import Challenge from '../models/challenge.model';
 import APIFeatures from '../utils/APIFeatures';
+import { format } from "date-fns"; 
 
 type ChallengeData = {
   title: string;
@@ -64,7 +65,18 @@ export default class ChallengeService {
   public static getChallengeById = async (id: string) => {
     try {
       const challenge = await Challenge.findById(id);
-      return challenge;
+      if (!challenge) {
+        throw new Error("Challenge not found");
+      }
+
+      const formattedDeadline = challenge.deadline
+      ? format(new Date(challenge.deadline), "MM/dd/yyyy") : null;
+
+  
+      return {
+        ...challenge.toObject(),
+        deadline: formattedDeadline
+      };
     } catch (error: any) {
       throw error;
     }
@@ -72,13 +84,14 @@ export default class ChallengeService {
 
   public static getAllChallenges = async (query: any) => {
     try {
+      const totalChallenges = await Challenge.countDocuments();
       const features = new APIFeatures(Challenge.find(), query)
       .filter()
       .sort()
       .limitFields()
       .paginate();
       const challenges = await features.query;
-      return challenges;
+      return { challenges, totalChallenges };
     } catch (error: any) {
       console.error('Error getting all challenges: ', error?.message);
       throw error;

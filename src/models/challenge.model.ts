@@ -39,13 +39,17 @@ const Challenge = new mongoose.Schema(
       required: [true, "Project requirements are required"]
     },
     deliverables: {
-      type: String,
+      type: [String],
       required: [true, "Project deliverables are required"]
     },
     status: {
       type: String,
       enum: ['completed', 'open', 'ongoing'],
       default: 'open'
+    },
+    participants: {
+      type: mongoose.Schema.ObjectId,
+      ref: 'User'
     }
   },
   {

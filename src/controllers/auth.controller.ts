@@ -41,7 +41,6 @@ export default class AuthController {
    */
   public static login = async (req: Request, res: Response) => {
     const { email, password } = req.body;
-    console.log("Here is the email: ", email);
     try {
       const user = await UserService.findUser(email);
       if (!user) {
