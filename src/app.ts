@@ -16,7 +16,7 @@
 
 
   app.use(cors({
-    origin: 'https://edtech-frontend-challenge.vercel.app',  
+    origin: ['http://localhost:3000', "https://edtech-frontend-challenge.vercel.app"],  
     credentials: true 
   }));
 
