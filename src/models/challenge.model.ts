@@ -47,10 +47,13 @@ const Challenge = new mongoose.Schema(
       enum: ['completed', 'open', 'ongoing'],
       default: 'open'
     },
-    participants: {
-      type: mongoose.Schema.ObjectId,
-      ref: 'User'
-    }
+    participants: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+      },
+    ],
+    
   },
   {
     timestamps: true

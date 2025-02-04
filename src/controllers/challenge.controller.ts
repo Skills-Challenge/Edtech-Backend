@@ -272,4 +272,63 @@ export default class ChallengeController {
       throw new AppError(`${error?.message}`, 500);
     }
   };
+
+
+   /**
+   * @swagger
+   * /challenge/join/{id}:
+   *  post:
+   *   summary: Join a challenge
+   *   description: Allows a user to join a challenge using its unique ID.
+   *   parameters:
+   *     - in: path
+   *       name: id
+   *       required: true
+   *       schema:
+   *         type: string
+   *       description: The unique ID of the challenge.
+   *   responses:
+   *     200:
+   *       description: Successfully joined the challenge
+   *     400:
+   *       description: User ID is required
+   *     500:
+   *       description: Internal Server Error
+   */
+  public static joinChallenge = async(req: Request, res: Response) => {
+    try{
+      const userId = req.user?._id?.toString();
+      if (!userId) {
+        return res.status(400).json({ message: "User ID is required" });
+      }
+      const challenge = await ChallengeService.joinChallenge(req.params.id,userId);
+      res.status(200).json({ status: "success", message:"You successfully joined challenge",challenge})
+    }catch(error: any){
+      res.status(500).json({ message: `${error?.message}` });
+      throw new AppError(`${error?.message}`, 500);
+    }
+  }
+
+   /**
+   * @swagger
+   * /challenge/total-participants:
+   *  get:
+   *   summary: Get total number of participants
+   *   description: Retrieve the total number of participants in all challenges.
+   *   responses:
+   *     200:
+   *       description: Total number of participants retrieved successfully
+   *     500:
+   *       description: Internal Server Error
+   */
+
+  public static getTotalParticipants = async (req: Request, res: Response) => {
+    try {
+      const totalParticipants = await ChallengeService.getTotalParticipants();
+      res.status(200).json({ totalParticipants });
+    } catch (error: any) {
+      res.status(500).json({ message: `${error?.message}` });
+    }
+  };
+  
 }

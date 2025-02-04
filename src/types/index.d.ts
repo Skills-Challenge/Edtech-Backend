@@ -1,12 +1,12 @@
-
+import mongoose from 'mongoose';
 
 export type User = {
-    name: string;
-    email: string;
-    password: string;
-    role: string;
-}
-
+  _id: mongoose.Types.ObjectId; 
+  name: string;
+  email: string;
+  password: string;
+  role: "talent" | "admin";
+};
 declare global {
   namespace Express {
     interface Request {

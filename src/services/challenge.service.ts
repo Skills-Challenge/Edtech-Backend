@@ -1,7 +1,8 @@
 import cron = require('node-cron');
 import Challenge from '../models/challenge.model';
 import APIFeatures from '../utils/APIFeatures';
-import { format } from "date-fns"; 
+import { format } from 'date-fns';
+import mongoose from 'mongoose';
 
 type ChallengeData = {
   title: string;
@@ -12,6 +13,7 @@ type ChallengeData = {
   brief: string;
   deliverables: string;
   requirements: string;
+  startTime: Date;
 };
 
 export default class ChallengeService {
@@ -20,6 +22,7 @@ export default class ChallengeService {
       title,
       deadline,
       description,
+      startTime,
       prize,
       contactEmail,
       brief,
@@ -27,21 +30,17 @@ export default class ChallengeService {
       deliverables,
     } = data;
     try {
-
       if (!deadline) {
-        throw new Error("deadline is required.");
+        throw new Error('deadline is required.');
       }
-
-      const startTime = new Date();
-    
 
       const start = startTime.getTime();
       const end = new Date(deadline).getTime();
       if (end <= start) {
-        throw new Error("Deadline must be later than the current time.");
+        throw new Error('Deadline must be later than the current time.');
       }
 
-      const durationInDays = Math.ceil((end - start) / ( 1000 * 60 * 60 * 24));
+      const durationInDays = Math.ceil((end - start) / (1000 * 60 * 60 * 24));
 
       const challenge = await Challenge.create({
         title,
@@ -66,16 +65,16 @@ export default class ChallengeService {
     try {
       const challenge = await Challenge.findById(id);
       if (!challenge) {
-        throw new Error("Challenge not found");
+        throw new Error('Challenge not found');
       }
 
       const formattedDeadline = challenge.deadline
-      ? format(new Date(challenge.deadline), "MM/dd/yyyy") : null;
+        ? format(new Date(challenge.deadline), 'MM/dd/yyyy')
+        : null;
 
-  
       return {
         ...challenge.toObject(),
-        deadline: formattedDeadline
+        deadline: formattedDeadline,
       };
     } catch (error: any) {
       throw error;
@@ -86,10 +85,10 @@ export default class ChallengeService {
     try {
       const totalChallenges = await Challenge.countDocuments();
       const features = new APIFeatures(Challenge.find(), query)
-      .filter()
-      .sort()
-      .limitFields()
-      .paginate();
+        .filter()
+        .sort()
+        .limitFields()
+        .paginate();
       const challenges = await features.query;
       return { challenges, totalChallenges };
     } catch (error: any) {
@@ -153,8 +152,6 @@ export default class ChallengeService {
       throw error;
     }
   };
-  
-
 
   public static updateChallengeStatus = async () => {
     cron.schedule('0 0 * * *', async () => {
@@ -176,6 +173,58 @@ export default class ChallengeService {
         throw error;
       }
     });
+  };
+
+  public static joinChallenge = async (challengeId: string, userId: string) => {
+    try {
+      const challenge = await Challenge.findById(challengeId);
+      if (!challenge) {
+        throw new Error('Challenge not found');
+      }
+
+      if (!Array.isArray(challenge.participants)) {
+        challenge.participants = [];
+      }
+
+      if (challenge.participants.map((id) => id.toString()).includes(userId)) {
+        throw new Error('User already joined this challenge');
+      }
+      challenge.participants.push(new mongoose.Types.ObjectId(userId));
+      await challenge.save();
+
+      return challenge;
+    } catch (error: any) {
+      console.error('Error joining challenge: ', error.message);
+      throw error;
+    }
+  };
+
+  public static getTotalParticipants = async () => {
+    try {
+      const result = await Challenge.aggregate([
+        {
+          $addFields: {
+            participants: { $ifNull: ["$participants", []] }
+          }
+        },
+        {
+          $project: {
+            partipantCount: { $size : "$participants"}
+          },
+        },
+        {
+          $group: {
+            _id: null,
+            totalParticipants: { $sum: "$participantsCount" } 
+          }
+        }
+      ])
+
+      return result.length > 0 ? result[0].totalParticipants : 0;
+    } catch (error: any) {
+      console.error('Error fetching total participants: ', error.message);
+      throw error;
+    }
   };
 }
 
