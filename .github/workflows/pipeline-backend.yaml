@@ -43,7 +43,7 @@ jobs:
         run: echo "MONGO_URL=mongodb://localhost:27017/testdb" >> $GITHUB_ENV &&
           echo "SECRET=${{ secrets.SECRET }}" >> $GITHUB_ENV
       - name: Test
-        run: CI=true pnpm test --detectOpenHandles
+        run: CI=true pnpm test 
   build-image:
     name: Build Docker Image
     runs-on: ubuntu-latest
