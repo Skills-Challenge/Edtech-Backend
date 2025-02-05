@@ -3,18 +3,9 @@ import Challenge from '../models/challenge.model';
 import APIFeatures from '../utils/APIFeatures';
 import { format } from 'date-fns';
 import mongoose from 'mongoose';
+import { ChallengeData } from '../types';
 
-type ChallengeData = {
-  title: string;
-  deadline: Date;
-  prize: string;
-  contactEmail: string;
-  description: string;
-  brief: string;
-  deliverables: string;
-  requirements: string;
-  startTime: Date;
-};
+
 
 export default class ChallengeService {
   public static createChallenge = async (data: ChallengeData) => {
@@ -34,7 +25,7 @@ export default class ChallengeService {
         throw new Error('deadline is required.');
       }
 
-      const start = startTime.getTime();
+      const start = new Date(startTime).getTime();
       const end = new Date(deadline).getTime();
       if (end <= start) {
         throw new Error('Deadline must be later than the current time.');
@@ -209,7 +200,7 @@ export default class ChallengeService {
         },
         {
           $project: {
-            partipantCount: { $size : "$participants"}
+            participantsCount: { $size : "$participants"}
           },
         },
         {

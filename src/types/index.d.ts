@@ -14,3 +14,16 @@ declare global {
     }
   }
 }
+
+
+export type ChallengeData = {
+  title: string;
+  deadline: string;
+  prize: string;
+  contactEmail: string;
+  description: string;
+  brief: string;
+  deliverables: string;
+  requirements: string;
+  startTime: string;
+};

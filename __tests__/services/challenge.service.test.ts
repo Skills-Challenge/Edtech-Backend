@@ -26,21 +26,22 @@ describe('ChallengeService', () => {
         it("it should create challenge successfully", async() => {
             const challengeData = {
                 title: 'Test Challenge',
-                deadline: new Date(Date.now() + 86400000), 
+                startTime: "2025-02-27", 
+                deadline: "2025-05-27", 
                 prize: '$1000',
                 contactEmail: 'test@example.com',
                 description: 'Test description',
                 brief: 'Test brief',
                 deliverables: 'Test deliverables',
                 requirements: 'Test requirements',
-            }
+            };
 
             const createdChallenge =  await ChallengeService.createChallenge(challengeData);
 
             expect(createdChallenge).toBeDefined();
             expect(createdChallenge.title).toBe(challengeData.title)
             expect(createdChallenge.prize).toBe(challengeData.prize)
-            expect(createdChallenge.duration).toBe('1 days')
+            expect(createdChallenge.duration).toBe('89 days')
         })
 
 
@@ -63,7 +64,8 @@ describe('ChallengeService', () => {
             const invalidChallengeData = {
                 title: 'Test Challenge',
                 prize: '$1000',
-                deadline: new Date(Date.now() - 86400000),
+                startTime: "2025-02-27", 
+                deadline: "2025-01-27", 
                 contactEmail: 'test@example.com',
                 description: 'Test description',
                 brief: 'Test brief',
@@ -81,7 +83,8 @@ describe('ChallengeService', () => {
         it("It should get challenge by id", async() => {
             const challengeData = {
                 title: 'Fetchable Challenge',
-                deadline: new Date(Date.now() + 86400000), 
+                startTime: "2025-02-27", 
+                deadline: "2025-05-27", 
                 prize: '$2000',
                 contactEmail: 'fetch@example.com',
                 description: 'Fetch test',
@@ -104,7 +107,8 @@ describe('ChallengeService', () => {
         it("it should update the challenge", async() => {
             const challengeData = {
                 title: 'Test Challenge',
-                deadline: new Date(Date.now() + 86400000), 
+                startTime: "2025-02-27", 
+                deadline: "2025-05-27", 
                 prize: '$1000',
                 contactEmail: 'test@example.com',
                 description: 'Test description',
@@ -144,7 +148,8 @@ describe('ChallengeService', () => {
         it("it should delete a challenge by id", async() => {
             const challengeData = {
                 title: 'Test Challenge',
-                deadline: new Date(Date.now() + 86400000), 
+                startTime: "2025-02-27", 
+                deadline: "2025-05-27", 
                 prize: '$1000',
                 contactEmail: 'test@example.com',
                 description: 'Test description',
@@ -178,7 +183,8 @@ describe('ChallengeService', () => {
         it("it should return all challenge stats based on challenge status", async () => {
             const challengeData = {
                 title: 'Test Challenge',
-                deadline: new Date(Date.now() + 86400000),
+                startTime: "2025-02-27", 
+                deadline: "2025-05-27", 
                 prize: '$1000',
                 contactEmail: 'test@example.com',
                 description: 'Test description',
