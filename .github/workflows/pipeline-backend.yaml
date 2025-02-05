@@ -40,6 +40,7 @@ jobs:
       - name: Install dependencies
         run: pnpm install
       - name: Set MongoDB URI
-        run: echo "MONGO_URL=mongodb://localhost:27017/testdb" >> $GITHUB_ENV
+        run: echo "MONGO_URL=mongodb://localhost:27017/testdb" >> $GITHUB_ENV &&
+             echo "SECRET=${{ secrets.SECRET }}" >> $GITHUB_ENV
       - name: Test
         run: CI=true pnpm test
