@@ -18,6 +18,11 @@ on:
 jobs:
   build:
     runs-on: ubuntu-22.04
+    services:
+      mongodb:
+        image: mongo:6.0
+        ports:
+          - 27017:27017
     strategy:
       matrix:
         node-version: [20]
@@ -34,5 +39,7 @@ jobs:
           cache: "pnpm"
       - name: Install dependencies
         run: pnpm install
+      - name: Set MongoDB URI
+        run: echo "MONGO_URL=mongodb://localhost:27017/testdb" >> $GITHUB_ENV
       - name: Test
         run: CI=true pnpm test

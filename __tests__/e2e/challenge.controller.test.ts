@@ -1,5 +1,4 @@
 import { MongoDBContainer } from "@testcontainers/mongodb";
-import "jest";
 import mongoose from "mongoose";
 import request from "supertest";
 import { ChallengeData } from "../../src/types";
@@ -19,7 +18,7 @@ describe("Challenge API EndPoints", () => {
         directConnection: true,
       });
       console.log("Connected to MongoDB");
-    });
+    },20000);
   
     afterAll(async () => {
       await mongoose.connection.close();
