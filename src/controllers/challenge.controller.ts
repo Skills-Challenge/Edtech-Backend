@@ -22,6 +22,7 @@ export default class ChallengeController {
    *             type: object
    *             required:
    *                - title
+   *                - startTime
    *                - deadline
    *                - duration
    *                - prize
@@ -30,11 +31,15 @@ export default class ChallengeController {
    *                - brief
    *                - requirements
    *                - deliverables
+   *                - skills
+   *                - seniorityLevel
    *             properties:
    *                title:
    *                  type: string
+   *                startTime:
+   *                  type: string
    *                deadline:
-   *                  type: Date
+   *                  type: string
    *                duration:
    *                  type: string
    *                prize:
@@ -42,12 +47,24 @@ export default class ChallengeController {
    *                contactEmail:
    *                   type: string
    *                description:
-   *                    type: string
+   *                    type: array
+   *                    items:
+   *                      type: string
    *                brief:
    *                    type: string
    *                requirements:
-   *                    type: string
+   *                    type: array
+   *                    items:
+   *                      type: string
    *                deliverables:
+   *                    type: array
+   *                    items:
+   *                      type: string
+   *                skills:
+   *                    type: array
+   *                    items:
+   *                      type: string
+   *                seniorityLevel:
    *                    type: string
    *   responses:
    *        201:

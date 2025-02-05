@@ -19,6 +19,8 @@ export default class ChallengeService {
       brief,
       requirements,
       deliverables,
+      seniorityLevel,
+      skills
     } = data;
     try {
       if (!deadline) {
@@ -44,6 +46,8 @@ export default class ChallengeService {
         brief,
         requirements,
         deliverables,
+        seniorityLevel,
+        skills
       });
       return challenge;
     } catch (err: any) {

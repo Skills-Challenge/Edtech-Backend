@@ -52,6 +52,18 @@ describe("Challenge API EndPoints", () => {
         
       })
 
+      it("should get all challenges", async () => {
+        const response = await request(app)
+          .get("/challenge/all");
+    
+        expect(response.status).toBe(200);
+        expect(response.body).toBeInstanceOf(Array);
+        expect(response.body.length).toBeGreaterThan(0);
+        expect(response.body.some((c: any) => c.title === newChallenge.title)).toBe(
+          true
+        );
+      });
+
 
       
 })

@@ -1,5 +1,4 @@
 import mongoose from 'mongoose';
-import Challenge from '../../src/models/challenge.model';
 import ChallengeService from '../../src/services/challenge.service';
 import { MongoMemoryServer } from 'mongodb-memory-server';
 

@@ -26,4 +26,6 @@ export type ChallengeData = {
   deliverables: string;
   requirements: string;
   startTime: string;
+  seniorityLevel?: string;
+  skills?: string;
 };
