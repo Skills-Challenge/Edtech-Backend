@@ -3,6 +3,7 @@ import mongoose from "mongoose";
 import request from "supertest";
 import { ChallengeData } from "../../src/types";
 import app from "../../src/app";
+import ChallengeService from "../../src/services/challenge.service";
 
 
 
@@ -24,6 +25,7 @@ describe("Challenge API EndPoints", () => {
       await mongoose.connection.close();
       await mongoose.disconnect();
       await mongodbContainer?.stop();
+      ChallengeService.stopChallengeStatusCron();
     });
 
       const newChallenge: ChallengeData = {
@@ -54,7 +56,7 @@ describe("Challenge API EndPoints", () => {
 
       it("should get all challenges", async () => {
         const response = await request(app)
-          .get("/challenge/all");
+          .get("/challenge/get-all");
     
         expect(response.status).toBe(200);
         expect(response.body).toBeInstanceOf(Array);

@@ -6,7 +6,7 @@ import mongoose from 'mongoose';
 import { ChallengeData } from '../types';
 
 
-
+let cronJob: any;
 export default class ChallengeService {
   public static createChallenge = async (data: ChallengeData) => {
     const {
@@ -149,15 +149,13 @@ export default class ChallengeService {
   };
 
   public static updateChallengeStatus = async () => {
-    cron.schedule('0 0 * * *', async () => {
+    cronJob = cron.schedule('0 0 * * *', async () => {
       try {
         const now = new Date();
-
         await Challenge.updateMany(
           { deadline: { $lt: now }, status: { $ne: 'completed' } },
           { status: 'completed' },
         );
-
         await Challenge.updateMany(
           { deadline: { $gt: now }, status: { $ne: 'open' } },
           { status: 'open' },
@@ -168,6 +166,14 @@ export default class ChallengeService {
         throw error;
       }
     });
+  };
+
+
+  public static stopChallengeStatusCron = () => {
+    if (cronJob) {
+      cronJob.stop();
+      console.log('Cron job stopped.');
+    }
   };
 
   public static joinChallenge = async (challengeId: string, userId: string) => {
