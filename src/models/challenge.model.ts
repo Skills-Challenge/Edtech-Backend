@@ -48,9 +48,7 @@ const Challenge = new mongoose.Schema(
       default: 'open'
     },
     seniorityLevel:{
-      type: String,
-      enum: ["Junior", "Intermediate", "Senior"],
-      default: "Junior",
+      type: [String],
       required: [true, "Seniority Levels are required for every challenge"]
     },
     skills: {
