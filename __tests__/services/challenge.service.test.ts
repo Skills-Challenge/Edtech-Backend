@@ -1,7 +1,8 @@
-import mongoose from 'mongoose';
-import ChallengeService from '../../src/services/challenge.service';
+import { MongoDBContainer } from "@testcontainers/mongodb";
+import mongoose from "mongoose";
 import { MongoMemoryServer } from 'mongodb-memory-server';
 import cron from 'node-cron';
+import ChallengeService from "../../src/services/challenge.service";
 
 
 
@@ -11,20 +12,22 @@ import cron from 'node-cron';
 
 
 describe('ChallengeService', () => {
-    let mongoserver: MongoMemoryServer;
+    let mongodbContainer: any;
     let cronJob: cron.ScheduledTask;
 
-
-    beforeAll(async() => {
-        mongoserver =  await MongoMemoryServer.create();
-        const uri = mongoserver.getUri();
-        await mongoose.connect(uri);
-    })
-
-    afterAll(async() => {
-        await mongoose.disconnect();
-        await mongoserver.stop();
-    })
+ beforeAll(async () => {
+      mongodbContainer = await new MongoDBContainer().start();
+      await mongoose.connect(mongodbContainer.getConnectionString(), {
+        directConnection: true,
+      });
+      console.log("Connected to MongoDB");
+    },20000);
+  
+    afterAll(async () => {
+      await mongoose.connection.close();
+      await mongoose.disconnect();
+      await mongodbContainer?.stop();
+    });
 
     beforeEach(() => {
         cronJob = cron.schedule('0 0 * * *', async () => {
