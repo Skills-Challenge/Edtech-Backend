@@ -3,7 +3,6 @@ import mongoose from "mongoose";
 import request from "supertest";
 import { ChallengeData } from "../../src/types";
 import app from "../../src/app";
-import ChallengeService from "../../src/services/challenge.service";
 
 
 
@@ -22,7 +21,6 @@ describe("Challenge API EndPoints", () => {
     },20000);
   
     afterAll(async () => {
-      ChallengeService.stopChallengeStatusCron();
       await mongoose.connection.close();
       await mongoose.disconnect();
       await mongodbContainer?.stop();
