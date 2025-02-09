@@ -169,13 +169,6 @@ export default class ChallengeService {
   };
 
 
-  public static stopChallengeStatusCron = () => {
-    if (cronJob) {
-      cronJob.stop();
-      console.log('Cron job stopped.');
-    }
-  };
-
   public static joinChallenge = async (challengeId: string, userId: string) => {
     try {
       const challenge = await Challenge.findById(challengeId);

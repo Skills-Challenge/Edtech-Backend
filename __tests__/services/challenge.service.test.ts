@@ -1,11 +1,18 @@
 import mongoose from 'mongoose';
 import ChallengeService from '../../src/services/challenge.service';
 import { MongoMemoryServer } from 'mongodb-memory-server';
+import cron from 'node-cron';
+
+
+
+
+
 
 
 
 describe('ChallengeService', () => {
     let mongoserver: MongoMemoryServer;
+    let cronJob: cron.ScheduledTask;
 
 
     beforeAll(async() => {
@@ -15,10 +22,21 @@ describe('ChallengeService', () => {
     })
 
     afterAll(async() => {
-        await ChallengeService.stopChallengeStatusCron();
         await mongoose.disconnect();
         await mongoserver.stop();
     })
+
+    beforeEach(() => {
+        cronJob = cron.schedule('0 0 * * *', async () => {
+          console.log('Running scheduled task');
+        });
+      });
+      
+      afterEach(() => {
+        if (cronJob) {
+          cronJob.stop();
+        }
+      });
 
 
 
