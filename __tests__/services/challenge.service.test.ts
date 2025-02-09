@@ -15,7 +15,7 @@ describe('ChallengeService', () => {
     })
 
     afterAll(async() => {
-        ChallengeService.stopChallengeStatusCron();
+        await ChallengeService.stopChallengeStatusCron();
         await mongoose.disconnect();
         await mongoserver.stop();
     })
