@@ -4,6 +4,7 @@ import { MongoMemoryServer } from 'mongodb-memory-server';
 import cron from 'node-cron';
 import ChallengeService from "../../src/services/challenge.service";
 
+
 describe('ChallengeService', () => {
     let mongodbContainer: any;
     let cronJob: cron.ScheduledTask;
