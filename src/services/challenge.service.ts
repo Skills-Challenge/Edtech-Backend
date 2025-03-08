@@ -5,7 +5,6 @@ import { format } from 'date-fns';
 import mongoose from 'mongoose';
 import { ChallengeData } from '../types';
 
-
 let cronJob: any;
 export default class ChallengeService {
   public static createChallenge = async (data: ChallengeData) => {
@@ -20,7 +19,7 @@ export default class ChallengeService {
       requirements,
       deliverables,
       seniorityLevel,
-      skills
+      skills,
     } = data;
     try {
       if (!deadline) {
@@ -47,7 +46,7 @@ export default class ChallengeService {
         requirements,
         deliverables,
         seniorityLevel,
-        skills
+        skills,
       });
       return challenge;
     } catch (err: any) {
@@ -84,6 +83,10 @@ export default class ChallengeService {
         .sort()
         .limitFields()
         .paginate();
+      if (!query.sort) {
+        features.query = features.query.sort('-createdAt'); 
+      }
+
       const challenges = await features.query;
       return { challenges, totalChallenges };
     } catch (error: any) {
@@ -168,7 +171,6 @@ export default class ChallengeService {
     });
   };
 
-
   public static joinChallenge = async (challengeId: string, userId: string) => {
     try {
       const challenge = await Challenge.findById(challengeId);
@@ -198,21 +200,21 @@ export default class ChallengeService {
       const result = await Challenge.aggregate([
         {
           $addFields: {
-            participants: { $ifNull: ["$participants", []] }
-          }
+            participants: { $ifNull: ['$participants', []] },
+          },
         },
         {
           $project: {
-            participantsCount: { $size : "$participants"}
+            participantsCount: { $size: '$participants' },
           },
         },
         {
           $group: {
             _id: null,
-            totalParticipants: { $sum: "$participantsCount" } 
-          }
-        }
-      ])
+            totalParticipants: { $sum: '$participantsCount' },
+          },
+        },
+      ]);
 
       return result.length > 0 ? result[0].totalParticipants : 0;
     } catch (error: any) {
